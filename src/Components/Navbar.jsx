@@ -57,16 +57,15 @@ import {
             ml={{ base: -2 }}
             display={{ base: 'flex', md: 'none' }}>
           </Flex>
-          <RouterLink to="/">
           <Flex flex={{ base: 100 }} justify={{ base: 'space-between', md: 'start' }}>
-            <Image src={myColor=='light'?'https://i.postimg.cc/QxksRNkQ/expedio-Logo.jpg':'https://i.postimg.cc/fRx4D7QH/logo3.png'}  alt='logo' width={{base:'350px',sm:'18%'}} />
-  
+            <RouterLink to="/">
+              <Image src={myColor=='light'?'https://i.postimg.cc/QxksRNkQ/expedio-Logo.jpg':'https://i.postimg.cc/fRx4D7QH/logo3.png'}  alt='logo' width={{base:'350px',sm:'18%'}} />
+            </RouterLink>
+
             <Flex display={{ base: 'none', md: 'flex' }} ml={6}>
               <DesktopNav />
             </Flex>
-        
           </Flex>
-          </RouterLink>
   
           <Stack
             flex={{ base: 1, sm: 0 }}

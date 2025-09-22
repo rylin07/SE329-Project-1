@@ -1,20 +1,23 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyBlKHCdVfQvMRKQf2B5UqaLfDkwm6T1apo",
-  authDomain: "challo-ghume-fa22c.firebaseapp.com",
-  projectId: "challo-ghume-fa22c",
-  storageBucket: "challo-ghume-fa22c.appspot.com",
-  messagingSenderId: "411994731743",
-  appId: "1:411994731743:web:a02cec85eb6aa66ddbe56a",
-  measurementId: "G-5KYMV9KZ2D"
+  apiKey: "AIzaSyD6mPDvqf6ATDIes0RVMEMeg21YY6gJz8I",
+  authDomain: "se329-project-1-40b4d.firebaseapp.com",
+  projectId: "se329-project-1-40b4d",
+  storageBucket: "se329-project-1-40b4d.firebasestorage.app",
+  messagingSenderId: "182748723718",
+  appId: "1:182748723718:web:2c051c0686977c9a4f6187",
+  measurementId: "G-5WQ7VCPS4F"
 };
 
 // Initialize Firebase
-const firebase_app = initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
 
-export default firebase_app
+export default app;

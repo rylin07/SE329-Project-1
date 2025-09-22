@@ -80,9 +80,10 @@ export const Register = () => {
   function handleVerifyNumber() {
     document.querySelector("#nextButton").innerText = "Please wait...";
     onCapture();
-    const phoneNumber = `+91${number}`;
+    const phoneNumber = number;
     const appVerifier = window.recaptchaVerifier;
-    if (number.length === 10) {
+    const e164Regex = /^\+[1-9]\d{9,14}$/;
+    if (e164Regex.test(phoneNumber)) {
       if (exist) {
         document.querySelector("#loginMesageError").innerHTML =
           "User Alredy exist";
@@ -96,7 +97,7 @@ export const Register = () => {
             setCheck({ ...check, verify: true });
             document.querySelector(
               "#loginMesageSuccess"
-            ).innerHTML = `Otp Send To ${number} !`;
+            ).innerHTML = `Otp Send To ${phoneNumber} !`;
             document.querySelector("#loginMesageError").innerHTML = "";
             document.querySelector("#nextButton").style.display = "none";
             // ...
@@ -166,7 +167,7 @@ export const Register = () => {
             <label htmlFor="">Enter Your Number</label>
             <span>
               <input
-                type="number"
+                type="text"
                 readOnly={verify}
                 name="number"
                 value={number}

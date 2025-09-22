@@ -31,16 +31,7 @@ export const Login = () => {
 
   const { number, otp, verify } = check;
 
-  let exist = false;
-  let data = {};
-
-  for (let i = 0; i <= user.length - 1; i++) {
-    if (user[i].number == number) {
-      exist = true;
-      data = user[i];
-      break;
-    }
-  }
+  // Remove local existence check. Firebase will handle authentication.
   // console.log(user)
   //
 
@@ -62,37 +53,24 @@ export const Login = () => {
   function handleVerifyNumber() {
     document.querySelector("#nextText").innerText = "Please wait...";
     onCapture();
-    const phoneNumber = `+91${number}`;
     const appVerifier = window.recaptchaVerifier;
-    if (number.length === 10) {
-      if (exist) {
-        signInWithPhoneNumber(auth, phoneNumber, appVerifier)
-          .then((confirmationResult) => {
-            // SMS sent. Prompt user to type the code from the message, then sign the
-            // user in with confirmationResult.confirm(code).
-            window.confirmationResult = confirmationResult;
-            setCheck({ ...check, verify: true });
-            document.querySelector(
-              "#loginMesageSuccess"
-            ).innerHTML = `Otp Send To ${number} !`;
-            document.querySelector("#loginMesageError").innerHTML = "";
-            document.querySelector("#nextText").style.display = "none";
-            // ...
-          })
-          .catch((error) => {
-            // Error; SMS not sent
-            // document.querySelector("#nextText").innerText = "Server Error"
-            // ...
-          });
-      } else {
-        document.querySelector("#loginMesageSuccess").innerHTML = ``;
-        document.querySelector("#loginMesageError").innerHTML =
-          "User does not exist Please Create Your Account !";
-          setInterval(() => {
-            window.location="/register"
-          }, 1000);
-      }
-      //
+    const phoneNumber = number;
+    const e164Regex = /^\+[1-9]\d{9,14}$/;
+    const localRegex = /^\d{10}$/;
+    if (e164Regex.test(phoneNumber) || localRegex.test(phoneNumber)) {
+      signInWithPhoneNumber(auth, phoneNumber, appVerifier)
+        .then((confirmationResult) => {
+          window.confirmationResult = confirmationResult;
+          setCheck({ ...check, verify: true });
+          document.querySelector(
+            "#loginMesageSuccess"
+          ).innerHTML = `Otp Send To ${number} !`;
+          document.querySelector("#loginMesageError").innerHTML = "";
+          document.querySelector("#nextText").style.display = "none";
+        })
+        .catch((error) => {
+          document.querySelector("#nextText").innerText = "Server Error";
+        });
     } else {
       document.querySelector("#loginMesageSuccess").innerHTML = ``;
       document.querySelector("#loginMesageError").innerHTML =
@@ -105,22 +83,23 @@ export const Login = () => {
     window.confirmationResult
       .confirm(otp)
       .then((result) => {
-        // User signed in successfully.
+       // User signed in successfully.
         const user = result.user;
 
         document.querySelector(
           "#loginMesageSuccess"
-        ).innerHTML = `Verifyed Successful`;
+        ).innerHTML = `Verified Successful`;
         document.querySelector("#loginMesageError").innerHTML = "";
 
-        dispatch(login_user(data));
-        // ...
+        // Save user info to Redux
+       dispatch(login_user(user));
+        // Redirect to home page
+        window.location = "/";
       })
       .catch((error) => {
         // User couldn't sign in (bad verification code?)
         document.querySelector("#loginMesageSuccess").innerHTML = ``;
         document.querySelector("#loginMesageError").innerHTML = "Invalid OTP";
-        // ...
       });
   }
 
@@ -153,7 +132,7 @@ export const Login = () => {
             <label htmlFor="">Enter Your Number</label>
             <span>
               <input
-                type="number"
+                type="text"
                 readOnly={verify}
                 name="number"
                 value={number}
