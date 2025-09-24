@@ -440,6 +440,17 @@
       "price": 4210,
       "totalTime": "2h : 00",
       "id": "22"
+    },
+    {
+      "id": "74b1",
+      "airline": "flying high",
+      "number": "3455",
+      "from": "MUMBAI",
+      "to": "DELHI",
+      "departure": "6:45",
+      "arrival": "7:45",
+      "price": 6800,
+      "totalTime": "1"
     }
   ],
   "giftcards": [
@@ -559,25 +570,6 @@
     }
   ],
   "hotel": [
-    {
-      "image": "https://r2imghtlak.mmtcdn.com/r2-mmt-htl-image/htl-imgs/201911121625076463-bb876932053a11eaac360242ac110002.jpg?&output-quality=75&downsize=583:388&output-format=jpg",
-      "img1": "https://r2imghtlak.mmtcdn.com/r2-mmt-htl-image/htl-imgs/201911121625076463-bb876932053a11eaac360242ac110002.jpg?&output-quality=75&downsize=583:388&output-format=jpg",
-      "img2": "https://r2imghtlak.mmtcdn.com/r2-mmt-htl-image/htl-imgs/201911121625076463-bc663e50053a11eaab9e0242ac110003.jpg?&output-quality=75&downsize=583:388&crop=583:388;2,0&output-format=jpg",
-      "img3": "https://r2imghtlak.mmtcdn.com/r2-mmt-htl-image/htl-imgs/201911121625076463-240b8736053b11eaae9e0242ac110005.jpg?&output-quality=75&downsize=583:388&output-format=jpg",
-      "img4": "https://r2imghtlak.mmtcdn.com/r2-mmt-htl-image/htl-imgs/201911121625076463-612cbd56053b11eab7ff0242ac110005.jpg?&output-quality=75&downsize=583:388&output-format=jpg",
-      "rating": 3.9,
-      "ratingtext": "Very Good",
-      "ratingcomment": "Based on  Ratings and  reviews",
-      "name": "Hotel Arafa Inn",
-      "place": "Gandhi Nagar",
-      "description": "",
-      "additional": "",
-      "taxes": 373,
-      "price": 2300,
-      "additional2": "",
-      "additional1": "",
-      "id": "4"
-    },
     {
       "image": "https://r2imghtlak.mmtcdn.com/r2-mmt-htl-image/htl-imgs/201605131430223672-995f8e90dc0011eba7770242ac110002.jpg?&output-quality=75&downsize=583:388&output-format=webp",
       "img1": "https://r2imghtlak.mmtcdn.com/r2-mmt-htl-image/htl-imgs/201605131430223672-995f8e90dc0011eba7770242ac110002.jpg?&output-quality=75&downsize=583:388&output-format=webp",
@@ -4831,6 +4823,15 @@
       "description": "Couple Friendly",
       "additional": "5km Away from Intenational Airport of Goa",
       "id": "264"
+    },
+    {
+      "id": "9418",
+      "image": "https://loveincorporated.blob.core.windows.net/contentimages/main/f7f9a7f3-eace-4ab0-8c82-eb035a24b97e-coolest-hotels-in-the-world.jpg",
+      "name": "Stay Vacay",
+      "place": "Mumbai",
+      "price": 6000,
+      "description": "Fun stay place",
+      "additional": ""
     }
   ],
   "Things_todo": [

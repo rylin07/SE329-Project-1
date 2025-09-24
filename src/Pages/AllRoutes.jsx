@@ -2,6 +2,7 @@ import { Admin } from "./Admin/AdminFlight";
 import { AdminStay } from "./Admin/AdminStay";
 import React from 'react'
 import { Route, Routes } from "react-router-dom";
+import BookingSuccess from "./Admin/BookingSuccess";
 // import { HomePage } from "./HomePage";
 import { AdminDashboard } from "./Admin/AdminDashboard";
 import { AdminProducts } from "./Admin/AdminProducts";
@@ -29,7 +30,7 @@ export const AllRoutes = () => {
             <Route path="/ThingsToDo" element={<Destination/>}/>
             <Route path="/stay" element={<StayData />} />
             <Route path="/flight" element={<FlightData />} />
-            
+            <Route path={"/booking-success"} element={<BookingSuccess />} />
             <Route path="/checkout" element={<CheckoutPage/>} ></Route>
           </Routes>
         </>
