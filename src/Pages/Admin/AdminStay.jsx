@@ -43,7 +43,7 @@ export const AdminStay = () => {
             <Link to={"/admin/adminstay"}>Add Stays</Link>
           </h1>
           <h1>
-            <Link to={"/admin/products"}>All Flights</Link>
+            <Link to={"/admin/flights"}>All Flights</Link>
           </h1>
           <h1>
             <Link to={"/admin/hotels"}>All Hotels</Link>
