@@ -1,4 +1,3 @@
-import axios from "axios";
 import {
   HOTEL_FAILURE,
   HOTEL_REQUEST,
@@ -7,6 +6,8 @@ import {
   NEW_GET_HOTELS_SUCCESS,
   DELETE_HOTEL,
 } from "./actionType";
+import { collection, addDoc, getDocs } from "firebase/firestore";
+import { db } from "../../01_firebase/config_firebase";
 
 export const getHotelSuccess = (payload) => {
   return { type: GET_HOTEL_SUCCESS, payload };
@@ -35,29 +36,34 @@ export const handleDeleteHotel = (payload) => {
 
 //
 
-export const addHotel = (payload) => (dispatch) => {
+export const addHotel = (payload) => async (dispatch) => {
   dispatch(hotelRequest());
 
-  axios
-    .post("http://localhost:8080/hotel", payload) // https://makemytrip-api-data.onrender.com/hotel
-    .then(() => {
-      dispatch(postHotelSuccess());
-    })
-    .catch((err) => {
-      dispatch(hotelFailure());
-    });
+  try {
+    const docRef = await addDoc(collection(db, "hotels"), payload);
+    console.log("Hotel added with ID: ", docRef.id);
+    dispatch(postHotelSuccess());
+  } catch (error) {
+    console.error("Error adding hotel: ", error);
+    dispatch(hotelFailure());
+  }
 };
 
-export const fetchingHotels = (limit) => (dispatch) => {
-  axios
-    .get(`http://localhost:8080/hotel?_limit=${limit}`) // https://makemytrip-api-data.onrender.com/hotel?_limit=${limit}
-    .then((res) => {
-      //   console.log(res.data);
-      dispatch(fetch_hotel(res.data));
-    })
-    .catch((err) => {
-      console.log(err);
+export const fetchingHotels = (limit) => async (dispatch) => {
+  dispatch(hotelRequest());
+
+  try {
+    const querySnapshot = await getDocs(collection(db, "stays"));
+    const hotels = [];
+    querySnapshot.forEach((doc) => {
+      hotels.push({ id: doc.id, ...doc.data() });
     });
+
+    dispatch(fetch_hotel(hotels.slice(0, limit)));
+  } catch (error) {
+    console.error("Error fetching hotels: ", error);
+    dispatch(hotelFailure());
+  }
 };
 
 export const DeleteHotel = (deleteId) => async (dispatch) => {

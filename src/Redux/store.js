@@ -7,7 +7,7 @@ import { LoginReducer } from "./Authantication/auth.reducer";
 import { StayReducer } from "./StayReducer/reducer";
 
 const rootReducer = combineReducers({
-  FlightReducer,
+  adminFlights: FlightReducer,
   HotelReducer,
   LoginReducer,
   StayReducer,

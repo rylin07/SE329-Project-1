@@ -6,23 +6,22 @@ import { Link } from "react-router-dom";
 import "font-awesome/css/font-awesome.min.css";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 
-import { DeleteHotel, fetchingHotels } from "../../Redux/AdminHotel/action";
+import { fetchFlightProducts, DeleteFlightProducts } from "../../Redux/AdminFlights/action";
 
-export const AllHotels = () => {
+const AllFlights = () => {
   const dispatch = useDispatch();
   const [limit, setLimit] = useState(5);
-  const { isLoading, data } = useSelector((store) => {
+  const { isLoading, data: flights } = useSelector((store) => {
+    const adminFlights = store.adminFlights || {};
     return {
-      isLoading: store.HotelReducer.isLoading,
-      data: store.HotelReducer.data,
+      isLoading: adminFlights.isLoading || false,
+      data: adminFlights.data || [],
     };
   }, shallowEqual);
-  // console.log(data);
 
-  const handleDeleteHotel = (deleteId) => {
-    dispatch(DeleteHotel(deleteId));
-    // alert(deleteId);
-    toast.success("Hotel Removed", {
+  const handleDeleteFlight = (deleteId) => {
+    dispatch(DeleteFlightProducts(deleteId));
+    toast.success("Flight Removed", {
       position: "top-right",
       autoClose: 5000,
       hideProgressBar: false,
@@ -35,16 +34,14 @@ export const AllHotels = () => {
   };
 
   const handleLoadMore = () => {
-    if (data.length >= limit) {
+    if (flights.length >= limit) {
       setLimit((prev) => prev + 5);
     }
   };
 
-  console.log(limit);
-
   useEffect(() => {
-    dispatch(fetchingHotels(limit));
-  }, [limit]);
+    dispatch(fetchFlightProducts(limit));
+  }, [limit, dispatch]);
 
   return (
     <>
@@ -57,39 +54,29 @@ export const AllHotels = () => {
           <h1><Link to={"/admin/products"}>All Flights</Link></h1>
           <h1><Link to={"/admin/hotels"}>All Hotels</Link></h1>
           <h1><Link to={"/"}>Log out</Link></h1>
-
         </div>
         <div className="adminProductbox">
           <div className="filterProdcut">
-            <input placeholder="Search Hotel" type="text" />
+            <input placeholder="Search Flight" type="text" />
             <button>Search</button>
-            {limit > data.length ? (
+            {limit > flights.length ? (
               ""
             ) : (
               <button onClick={handleLoadMore}>Load More</button>
             )}
           </div>
-          <div className="head"><h1>All Hotels</h1></div>
+          <div className="head"><h1>All Flights</h1></div>
 
-          {/*  */}
           {isLoading ? <h1>Please wait...</h1> : ""}
-          {data.map((ele, i) => (
+          {flights.map((flight, i) => (
             <div key={i} className="adminProductlist">
+              <span>{flight.airline || "Unknown Airline"}</span>
+              <span>{flight.from}</span>
+              <span>{flight.to}</span>
+              <span>Rs.{flight.price}</span>
+              <span>{flight.number}</span>
               <span>
-                <img src={ele.image} alt="" />
-              </span>
-              <span>
-                {/* {ele.name == "" ? "Default" : ""} */}
-                {ele.name.length > 10
-                  ? (ele.name = ele.name.substring(0, 10) + "...")
-                  : ele.name}
-              </span>
-              <span>{ele.place}</span>
-              <span>Rs.{ele.taxes}</span>
-              <span>Rs.{ele.price}</span>
-              <span>{ele.number}</span>
-              <span>
-                <button onClick={() => handleDeleteHotel(ele.id)}>
+                <button onClick={() => handleDeleteFlight(flight.id)}>
                   Delete <i className="fa fa-trash"></i>
                 </button>
                 <button>
@@ -98,9 +85,10 @@ export const AllHotels = () => {
               </span>
             </div>
           ))}
-          {/*  */}
         </div>
       </div>
     </>
   );
 };
+
+export default AllFlights;

@@ -1,7 +1,7 @@
 import "./Admin.Module.css";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { addHotel } from "../../Redux/AdminHotel/action";
+import { addEntity } from "../../Redux/AdminFlights/action";
 import { useDispatch } from "react-redux";
 
 let initialState = {
@@ -13,37 +13,48 @@ let initialState = {
   additional: "",
 };
 export const AdminStay = () => {
-  const [hotel, setHotel] = useState(initialState);
+  const [stay, setStay] = useState(initialState);
   const dispatch = useDispatch();
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    setHotel((prev) => {
+    setStay((prev) => {
       return { ...prev, [name]: name === "price" ? +value : value };
     });
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(hotel);
-    dispatch(addHotel(hotel));
-    setHotel(initialState);
+    console.log(stay);
+    dispatch(addEntity("stays", stay));
+    setStay(initialState);
   };
 
   return (
     <>
       <div className="adminFlightMai">
         <div className="adminSideBr">
-        <h1><Link to={"/admin"}>Home</Link></h1>
-          <h1><Link to={"/admin/adminflight"}>Add Flight</Link></h1>
-          <h1><Link to={"/admin/adminstay"}>Add Stays</Link></h1>
-          <h1><Link to={"/admin/products"}>All Flights</Link></h1>
-          <h1><Link to={"/admin/hotels"}>All Hotels</Link></h1>
-          <h1><Link to={"/"}>Log out</Link></h1>
-
+          <h1>
+            <Link to={"/admin"}>Home</Link>
+          </h1>
+          <h1>
+            <Link to={"/admin/adminflight"}>Add Flight</Link>
+          </h1>
+          <h1>
+            <Link to={"/admin/adminstay"}>Add Stays</Link>
+          </h1>
+          <h1>
+            <Link to={"/admin/products"}>All Flights</Link>
+          </h1>
+          <h1>
+            <Link to={"/admin/hotels"}>All Hotels</Link>
+          </h1>
+          <h1>
+            <Link to={"/"}>Log out</Link>
+          </h1>
         </div>
         <div className="adminFlightBox">
           <div className="adminHead">
-            <h2>Admin Panel for Hotel</h2>
+            <h2>Admin Panel for Stays</h2>
           </div>
 
           <div className="adminFlightInputs">
@@ -53,11 +64,11 @@ export const AdminStay = () => {
               }}
             >
               <div className="adminFlightInputBx">
-                <label htmlFor="">Hotel Image</label>
+                <label htmlFor="">Stay Image</label>
                 <input
                   type="url"
                   name="image"
-                  value={hotel.image}
+                  value={stay.image}
                   onChange={(e) => handleChange(e)}
                 />
               </div>
@@ -67,7 +78,7 @@ export const AdminStay = () => {
                 <input
                   type="text"
                   name="name"
-                  value={hotel.name}
+                  value={stay.name}
                   onChange={(e) => handleChange(e)}
                 />
               </div>
@@ -77,7 +88,7 @@ export const AdminStay = () => {
                 <input
                   type="text"
                   name="place"
-                  value={hotel.place}
+                  value={stay.place}
                   onChange={(e) => handleChange(e)}
                 />
               </div>
@@ -86,7 +97,7 @@ export const AdminStay = () => {
                 <input
                   type="number"
                   name="price"
-                  value={hotel.price}
+                  value={stay.price}
                   onChange={(e) => handleChange(e)}
                 />
               </div>
@@ -95,7 +106,7 @@ export const AdminStay = () => {
                 <input
                   type="text"
                   name="description"
-                  value={hotel.description}
+                  value={stay.description}
                   onChange={(e) => handleChange(e)}
                 />
               </div>
@@ -104,14 +115,14 @@ export const AdminStay = () => {
                 <input
                   type="text"
                   name="additional"
-                  value={hotel.additional}
+                  value={stay.additional}
                   onChange={(e) => handleChange(e)}
                 />
               </div>
 
               <div className="adminFlightInputBx">
                 <span></span>
-                <button>Add Hotel</button>
+                <button>Add Stay</button>
               </div>
             </form>
           </div>

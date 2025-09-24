@@ -9,6 +9,8 @@ import {
   NEW_GET_HOTELS_SUCCESS,
   DELETE_HOTEL,
 } from "./actionType";
+import { collection, addDoc, getDocs, doc, deleteDoc } from "firebase/firestore";
+import { db } from "../../01_firebase/config_firebase";
 
 export const getHotelSuccess = (payload) => {
   return { type: GET_HOTEL_SUCCESS, payload };
@@ -37,63 +39,60 @@ export const handleDeleteHotel = (payload) => {
 
 //Pick date and city for storing into redux store
 
-export const selectDateAndCity = (checkInDate,checkOutDate) => {
+export const selectDateAndCity = (checkInDate, checkOutDate) => {
   return { type: SELECTED_DATE_AND_CITY, payload: { checkInDate, checkOutDate } };
 };
 export const selectCity = (selectedCity) => {
   return { type: SELECTED_CITY, payload: { selectedCity } };
 };
 
-export const addHotel = (payload) => (dispatch) => {
+export const addHotel = (payload) => async (dispatch) => {
   dispatch(hotelRequest());
 
-  axios
-    .post("https://happy-sunglasses-eel.cyclic.app/hotel", payload) 
-    .then(() => {
-      dispatch(postHotelSuccess());
-    })
-    .catch((err) => {
-      dispatch(hotelFailure());
-    });
-};
-
-//https://happy-sunglasses-eel.cyclic.app/hotel?_sort=asc&_order=price&page=1&_limit=20
-export const fetchingHotels = (sort, order, page) => async (dispatch) => {
-  console.log(order, sort,page);
-  dispatch({ type: HOTEL_REQUEST });
   try {
-    const res = await axios.get(
-      `https://happy-sunglasses-eel.cyclic.app/hotel?_sort=${sort}&_order=${order}&_page=${page}&_limit=20`
-    );
-    console.log(res.data);
-    dispatch({ type: GET_HOTEL_SUCCESS, payload: res.data });
-  } catch (err) {
-    dispatch({ type: HOTEL_FAILURE });
-    console.log(err);
+    const docRef = await addDoc(collection(db, "hotels"), payload);
+    console.log("Hotel added with ID: ", docRef.id);
+    dispatch(postHotelSuccess());
+  } catch (error) {
+    console.error("Error adding hotel: ", error);
+    dispatch(hotelFailure());
   }
 };
 
-
-
-
-
-//
-
-export const DeleteHotel = (deleteId) => async (dispatch) => {
+export const fetchingHotels = () => async (dispatch) => {
   try {
-    const res = await fetch(
-      `https://happy-sunglasses-eel.cyclic.app/hotel/${deleteId}`, 
-      {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    let data = await res.json();
-    console.log(data);
-    dispatch(handleDeleteHotel(deleteId));
-  } catch (e) {
-    console.log(e);
+    const querySnapshot = await getDocs(collection(db, "stays"));
+    const stays = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    dispatch({ type: "FETCH_HOTELS_SUCCESS", payload: stays });
+  } catch (error) {
+    console.error("Error fetching stays:", error);
+    dispatch({ type: "FETCH_HOTELS_FAILURE" });
+  }
+};
+
+export const DeleteHotel = (id) => async (dispatch) => {
+  try {
+    await deleteDoc(doc(db, "stays", id));
+    dispatch({ type: "DELETE_HOTEL_SUCCESS", payload: id });
+  } catch (error) {
+    console.error("Error deleting stay:", error);
+    dispatch({ type: "DELETE_HOTEL_FAILURE" });
+  }
+};
+
+export const addStay = (stayData) => async (dispatch) => {
+  dispatch({ type: "ADD_STAY_REQUEST" });
+
+  try {
+    const docRef = await addDoc(collection(db, "stays"), {
+      ...stayData,
+      price: stayData.price || 0, // Default to 0
+      rating: stayData.rating || 1, // Default to 1
+    });
+    console.log("Stay added with ID:", docRef.id);
+    dispatch({ type: "ADD_STAY_SUCCESS", payload: { id: docRef.id, ...stayData } });
+  } catch (error) {
+    console.error("Error adding stay:", error);
+    dispatch({ type: "ADD_STAY_FAILURE" });
   }
 };

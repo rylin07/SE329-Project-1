@@ -1,4 +1,3 @@
-import axios from "axios";
 import {
   DELETE_FLIGHTS,
   FETCH_FLIGHTS,
@@ -7,6 +6,9 @@ import {
   GET_FLIGHT_SUCCESS,
   POST_FLIGHT_SUCCESS,
 } from "./actionType";
+import { collection, addDoc, getDocs } from "firebase/firestore";
+import { db } from "../../01_firebase/config_firebase";
+import axios from "axios";
 
 export const getFlightSuccess = (payload) => {
   return { type: GET_FLIGHT_SUCCESS, payload };
@@ -33,30 +35,36 @@ export const handleDeleteProduct = (payload) => {
   return { type: DELETE_FLIGHTS, payload };
 };
 
-export const addFlight = (payload) => (dispatch) => {
+export const addFlight = (payload) => async (dispatch) => {
+  console.log("addFlight action called with payload:", payload);
   dispatch(flightRequest());
 
-  axios
-    .post("http://localhost:8080/flight", payload) // https://makemytrip-api-data.onrender.com/flight
-    .then(() => {
-      dispatch(postFlightSuccess());
-    })
-    .catch((err) => {
-      dispatch(flightFailure());
-    });
+  try {
+    const docRef = await addDoc(collection(db, "flights"), payload);
+    console.log("Flight added with ID:", docRef.id);
+    dispatch(postFlightSuccess());
+  } catch (error) {
+    console.error("Error adding flight:", error);
+    dispatch(flightFailure());
+  }
 };
 
-//
-export const fetchFlightProducts = (limit) => (dispatch) => {
+export const fetchFlightProducts = (limit) => async (dispatch) => {
   dispatch(flightRequest());
-  axios
-    .get(`http://localhost:8080/flight?_limit=${limit}`)   //https://makemytrip-api-data.onrender.com/flight?_limit=${limit}
-    .then((res) => {
-      dispatch(fetch_flights_product(res.data));
-    })
-    .catch((err) => {
-      dispatch(flightFailure());
+
+  try {
+    const querySnapshot = await getDocs(collection(db, "flights"));
+    const flights = [];
+    querySnapshot.forEach((doc) => {
+      flights.push({ id: doc.id, ...doc.data() });
     });
+    console.log("Fetched flights from Firestore:", flights);
+
+    dispatch(fetch_flights_product(flights.slice(0, limit)));
+  } catch (error) {
+    console.error("Error fetching flights: ", error);
+    dispatch(flightFailure());
+  }
 };
 
 export const DeleteFlightProducts = (deleteId) => async (dispatch) => {
@@ -76,5 +84,19 @@ export const DeleteFlightProducts = (deleteId) => async (dispatch) => {
     dispatch(handleDeleteProduct(deleteId));
   } catch (e) {
     console.log(e);
+  }
+};
+
+export const addEntity = (entityType, payload) => async (dispatch) => {
+  console.log(`addEntity action called for ${entityType} with payload:`, payload);
+  dispatch(flightRequest());
+
+  try {
+    const docRef = await addDoc(collection(db, entityType), payload);
+    console.log(`${entityType} added with ID:`, docRef.id);
+    dispatch(postFlightSuccess());
+  } catch (error) {
+    console.error(`Error adding ${entityType}:`, error);
+    dispatch(flightFailure());
   }
 };

@@ -1,73 +1,60 @@
-import axios from "axios";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../../01_firebase/config_firebase";
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-// import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { fetchFlightProducts } from "../../Redux/AdminFlights/action";
 import "./AdminDashboard.Module.css";
 
-
 export const AdminDashboard = () => {
-  const dispatch = useDispatch();
   const [flight, setFlight] = useState(0);
   const [hotel, setHotel] = useState(0);
   const [users, setUsers] = useState(0);
   const [giftCard, setGiftCard] = useState(0);
   const [things, setThings] = useState(0);
- const [loading, setLoading] = useState(false);
 
-  const getHotel = () => {
-    setLoading(true);
-    axios
-      .get("http://localhost:8080/flight")
-      .then((res) => {
-        setFlight(res.data.length);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    //
-    axios
-      .get("http://localhost:8080/hotel")
-      .then((res) => {
-        setHotel(res.data.length);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    //
-    axios
-      .get("http://localhost:8080/users")
-      .then((res) => {
-        setUsers(res.data.length);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  const fetchData = async () => {
+    try {
+      const flightsSnapshot = await getDocs(collection(db, "flights"));
+      console.log("Fetched flights:", flightsSnapshot.docs.map((doc) => doc.data()));
+      setFlight(flightsSnapshot.size);
+    } catch (error) {
+      console.error("Error fetching flights:", error);
+    }
 
-      axios
-      .get("http://localhost:8080/giftcards")
-      .then((res) => {
-        setGiftCard(res.data.length);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    
-      axios
-      .get("http://localhost:8080/Things_todo")
-      .then((res) => {
-        setThings(res.data.length);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    
-    
+    try {
+      const staysSnapshot = await getDocs(collection(db, "stays"));
+      console.log("Fetched stays:", staysSnapshot.docs.map((doc) => doc.data()));
+      setHotel(staysSnapshot.size);
+    } catch (error) {
+      console.error("Error fetching stays:", error);
+    }
+
+    try {
+      const usersSnapshot = await getDocs(collection(db, "users"));
+      console.log("Fetched users:", usersSnapshot.docs.map((doc) => doc.data()));
+      setUsers(usersSnapshot.size);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    }
+
+    try {
+      const giftCardsSnapshot = await getDocs(collection(db, "giftcards"));
+      console.log("Fetched giftcards:", giftCardsSnapshot.docs.map((doc) => doc.data()));
+      setGiftCard(giftCardsSnapshot.size);
+    } catch (error) {
+      console.error("Error fetching giftcards:", error);
+    }
+
+    try {
+      const thingsSnapshot = await getDocs(collection(db, "Things_todo"));
+      console.log("Fetched things to do:", thingsSnapshot.docs.map((doc) => doc.data()));
+      setThings(thingsSnapshot.size);
+    } catch (error) {
+      console.error("Error fetching things to do:", error);
+    }
   };
 
   useEffect(() => {
-    getHotel();
+    fetchData();
   }, []);
 
   return (
