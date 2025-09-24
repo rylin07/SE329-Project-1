@@ -6,6 +6,7 @@ import {TbBed} from 'react-icons/tb'
 import {BsCheck} from 'react-icons/bs'
 import {IoIosMan} from 'react-icons/io'
 import {AiOutlineWifi} from 'react-icons/ai'
+import { Link as RouterLink } from "react-router-dom"
 
 const CheckoutPage = () => {
   return (
@@ -140,7 +141,7 @@ const CheckoutPage = () => {
                 <Box>Pay at property</Box>
                 <Box>$11,210.00</Box>
               </Box>
-              <Button mt={4} width={'100%'} height='40px' bg={'#FF9800'}rounded={'7px'} >Complete Booking</Button>
+              <Button as={RouterLink} to={"/booking-success"} mt={4} width={'100%'} height='40px' bg={'#FF9800'}rounded={'7px'} >Complete Booking</Button>
             </Box>
           </SimpleGrid>
         </Box>
