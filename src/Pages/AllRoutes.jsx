@@ -31,7 +31,7 @@ export const AllRoutes = () => {
             <Route path="/ThingsToDo" element={<Destination/>}/>
             <Route path="/stay" element={<StayData />} />
             <Route path="/flight" element={<FlightData />} />
-            
+            <Route path={"/booking-success"} element={<BookingSuccess />} />
             <Route path="/checkout" element={<CheckoutPage/>} ></Route>
             <Route path="/admin/flights" element={<AllFlights />} />
           </Routes>
